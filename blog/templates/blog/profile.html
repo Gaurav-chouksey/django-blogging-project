@@ -1,0 +1,112 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    
+    <!-- Profile Update Card -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header" style="background-color: #C4D8E2;">
+        <h2 class="mb-0">My Profile</h2>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <!-- Username Field -->
+          <div class="form-group">
+            <label for="id_username">Username</label>
+            <input type="text" name="username" id="id_username" class="form-control" 
+                   value="{{ form.username.value|default_if_none:'' }}">
+            {% if form.username.errors %}
+              <div class="text-danger">
+                {{ form.username.errors }}
+              </div>
+            {% endif %}
+          </div>
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="id_email">Email</label>
+            <input type="email" name="email" id="id_email" class="form-control" 
+                   value="{{ form.email.value|default_if_none:'' }}">
+            {% if form.email.errors %}
+              <div class="text-danger">
+                {{ form.email.errors }}
+              </div>
+            {% endif %}
+          </div>
+          <!-- First Name Field -->
+          <div class="form-group">
+            <label for="id_first_name">First Name</label>
+            <input type="text" name="first_name" id="id_first_name" class="form-control" 
+                   value="{{ form.first_name.value|default_if_none:'' }}">
+            {% if form.first_name.errors %}
+              <div class="text-danger">
+                {{ form.first_name.errors }}
+              </div>
+            {% endif %}
+          </div>
+          <!-- Last Name Field -->
+          <div class="form-group">
+            <label for="id_last_name">Last Name</label>
+            <input type="text" name="last_name" id="id_last_name" class="form-control" 
+                   value="{{ form.last_name.value|default_if_none:'' }}">
+            {% if form.last_name.errors %}
+              <div class="text-danger">
+                {{ form.last_name.errors }}
+              </div>
+            {% endif %}
+          </div>
+          <button type="submit" class="btn btn-success">Update Profile</button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- My Posts Card -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header" style="background-color: #C4D8E2;">
+        <h3 class="mb-0">My Posts</h3>
+      </div>
+      <div class="card-body">
+        {% if posts %}
+          <ul class="list-group">
+            {% for post in posts %}
+              <li class="list-group-item">
+                <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
+                <small class="text-muted float-right">{{ post.created_at }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>You haven't created any posts yet.</p>
+        {% endif %}
+      </div>
+    </div>
+    
+    <!-- My Comments Card -->
+    <div class="card shadow-sm">
+      <div class="card-header" style="background-color: #C4D8E2;">
+        <h3 class="mb-0">My Comments</h3>
+      </div>
+      <div class="card-body">
+        {% if comments %}
+          <ul class="list-group">
+            {% for comment in comments %}
+              <li class="list-group-item">
+                <p>{{ comment.content }}</p>
+                <small class="text-muted">
+                  On post: <a href="{% url 'post_detail' comment.post.id %}">{{ comment.post.title }}</a>
+                </small>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>You haven't posted any comments yet.</p>
+        {% endif %}
+      </div>
+    </div>
+    
+  </div>
+</div>
+{% endblock %}
